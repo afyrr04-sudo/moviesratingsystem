@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topflix | Premium Movie Ratings & Ticket Price Comparison</title>
+  
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- SPLASH SCREEN INTRO OVERLAY -->
+  <div id="splash-screen" class="splash-overlay hidden">
+    <div class="splash-content">
+      <div class="splash-logo">
+        <svg class="splash-logo-icon" viewBox="0 0 60 60" width="76" height="76">
+          <circle cx="30" cy="30" r="22" fill="#ffffff" stroke="#b026ff" stroke-width="4" />
+          <path d="M24 18 L41 30 L24 42 Z" fill="#000000" />
+        </svg>
+        <span class="splash-logo-text">Topflix<span class="logo-dot">.</span></span>
+      </div>
+      <div class="splash-loader-wrap">
+        <div class="splash-loader-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header & Navigation -->
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 60 60" width="34" height="34">
+          <circle cx="30" cy="30" r="22" fill="#ffffff" stroke="#b026ff" stroke-width="4" />
+          <path d="M24 18 L41 30 L24 42 Z" fill="#000000" />
+        </svg>
+        <span class="logo-text">Topflix<span class="logo-dot">.</span></span>
+      </div>
+      
+      <nav class="nav-tabs hidden" id="user-nav-tabs">
+        <button class="tab-btn active" data-tab="now-showing">Now Showing</button>
+        <button class="tab-btn" data-tab="upcoming">Release Calendar</button>
+        <button class="tab-btn" data-tab="compare-prices">Compare Prices</button>
+        <button class="tab-btn" data-tab="favorites">My Watchlist <span id="fav-count" class="count-badge">0</span></button>
+      </nav>
+
+      <!-- User Status Panel -->
+      <div id="header-user-status" class="header-user-status hidden">
+        <span class="user-display-badge" id="user-display-role">User</span>
+        <button class="btn btn-secondary btn-sm" id="header-logout-btn">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- AUTHENTICATION VIEW -->
+  <div id="view-auth" class="role-view">
+    <main class="portal-container" style="max-width: 450px; margin: 4rem auto; padding: 0;">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <svg class="logo-icon" viewBox="0 0 60 60" width="46" height="46" style="margin-bottom: 0.5rem; margin-left: auto; margin-right: auto; display: block;">
+            <circle cx="30" cy="30" r="22" fill="#ffffff" stroke="#b026ff" stroke-width="4" />
+            <path d="M24 18 L41 30 L24 42 Z" fill="#000000" />
+          </svg>
+          <h2 style="font-size: 1.8rem; margin-bottom: 1rem; text-align: center;">Topflix<span class="logo-dot">.</span></h2>
+        </div>
+        
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" id="auth-tab-signin">Sign In</button>
+          <button class="auth-tab-btn" id="auth-tab-signup">Sign Up</button>
+        </div>
+
+        <form id="auth-form" class="review-form" style="background: transparent; border: none; padding: 1rem 0 0;">
+          <input type="hidden" id="auth-mode" value="signin" />
+          
+          <div class="form-group">
+            <label for="auth-username">Username</label>
+            <input type="text" id="auth-username" placeholder="Enter username..." required autocomplete="off" />
+          </div>
+          
+          <div class="form-group">
+            <label for="auth-password">Password</label>
+            <input type="password" id="auth-password" placeholder="Enter password..." required />
+          </div>
+
+          <div class="auth-info-box" id="auth-info-box" style="margin-top: 1rem; background: rgba(255, 255, 255, 0.02); padding: 0.85rem; border-radius: 10px; border: 1px solid var(--border-glass);">
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;"><strong>Demo Credentials:</strong></p>
+            <ul style="font-size: 0.8rem; color: var(--text-muted); padding-left: 1rem;">
+              <li><strong>User</strong>: user / 1234</li>
+              <li><strong>Admin</strong>: admin / 1234</li>
+              <li><strong>Agency</strong>: agency / 1234</li>
+            </ul>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" id="auth-submit-btn" style="margin-top: 1.25rem;">
+            <span class="btn-text">Log In</span>
+            <span class="spinner hidden"></span>
+          </button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <!-- USER VIEW -->
+  <div id="view-user" class="role-view hidden">
+    <!-- Featured Hero Section -->
+    <section class="hero-section" id="featured-hero">
+      <div class="hero-backdrop" id="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-info-col">
+          <div class="hero-badge" id="hero-recommendation-tag">TRENDING RECOMMENDATION</div>
+          <h1 class="hero-title" id="hero-title">Galactic Horizon</h1>
+          <div class="hero-meta">
+            <span class="age-badge" id="hero-age-rating">P13</span>
+            <span class="genre-tag" id="hero-genre">Sci-Fi</span>
+            <span class="hero-release-date" id="hero-release">Released: May 15, 2026</span>
+            <div class="rating-display">
+              <span class="star filled">★</span>
+              <span class="rating-val" id="hero-rating">4.8</span>
+            </div>
+          </div>
+          <p class="hero-synopsis" id="hero-synopsis">
+            A group of elite astronauts embark on a high-stakes mission through a newly discovered wormhole in search of a habitable planet to save humanity.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" id="hero-btn-reviews">Read Reviews</button>
+            <button class="btn btn-secondary" id="hero-btn-tickets">Compare Tickets</button>
+          </div>
+        </div>
+        <div class="hero-poster-col">
+          <div class="hero-poster-frame">
+            <img id="hero-poster" src="" alt="Featured Poster" onerror="this.style.display='none'" />
+          </div>
+        </div>
+      </div>
+      <!-- Carousel navigation controls -->
+      <button class="hero-nav-btn prev" id="hero-prev-btn" aria-label="Previous Trending Movie">&lsaquo;</button>
+      <button class="hero-nav-btn next" id="hero-next-btn" aria-label="Next Trending Movie">&rsaquo;</button>
+    </section>
+
+    <!-- Main Portal Section -->
+    <main class="portal-container">
+      <!-- Filters & Search Toolbar -->
+      <section class="toolbar">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="Search movies by title or storyline..." autocomplete="off" />
+        </div>
+        
+        <div class="filter-controls">
+          <!-- Genre Chips -->
+          <div class="genre-chips-container">
+            <button class="chip active" data-genre="all">All Genres</button>
+            <button class="chip" data-genre="Action">Action</button>
+            <button class="chip" data-genre="Horror">Horror</button>
+            <button class="chip" data-genre="Comedy">Comedy</button>
+            <button class="chip" data-genre="Romance">Romance</button>
+            <button class="chip" data-genre="Sci-Fi">Sci-Fi</button>
+          </div>
+          
+          <!-- Sorting -->
+          <div class="sort-box">
+            <label for="sort-select">Sort By:</label>
+            <select id="sort-select">
+              <option value="trending">Recommendations</option>
+              <option value="rating">Highest Rating</option>
+              <option value="release_date">Release Date</option>
+              <option value="title">Title (A-Z)</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Movies Grid Section -->
+      <section class="movies-wrapper">
+        <h2 class="section-title" id="grid-title">Now Showing</h2>
+        <div class="movie-grid" id="movie-list">
+          <div class="skeleton-loader"></div>
+          <div class="skeleton-loader"></div>
+          <div class="skeleton-loader"></div>
+        </div>
+        <div id="no-movies-message" class="no-results hidden">
+          <div class="no-results-icon">🎬</div>
+          <h3>No movies found</h3>
+          <p>Try adjusting your search filters or add movies to your Watchlist.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ADMIN VIEW -->
+  <div id="view-admin" class="role-view hidden">
+    <main class="portal-container">
+      <div class="admin-header-row">
+        <h2 class="section-title">Movie Catalog Management</h2>
+        <button class="btn btn-primary" id="admin-add-movie-btn">+ Add New Movie</button>
+      </div>
+
+      <!-- Admin stats panel -->
+      <div class="admin-stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🎬</div>
+          <div class="stat-info">
+            <h4 id="stat-total-movies">0</h4>
+            <p>Total Movies</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-info">
+            <h4 id="stat-avg-rating">0.0</h4>
+            <p>Overall Average</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💬</div>
+          <div class="stat-info">
+            <h4 id="stat-total-reviews">0</h4>
+            <p>Total User Reviews</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin movies table -->
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Poster</th>
+              <th>Movie Title</th>
+              <th>Genre</th>
+              <th>Release Date</th>
+              <th>Age Rating</th>
+              <th>Average Rating</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-movies-tbody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- AGENCY VIEW -->
+  <div id="view-agency" class="role-view hidden">
+    <main class="portal-container">
+      <div class="admin-header-row">
+        <h2 class="section-title">Cinema Agency Dashboard</h2>
+        <div class="agency-selector-box">
+          <label for="agency-cinema-select">Cinema Provider:</label>
+          <select id="agency-cinema-select" class="role-select">
+            <option value="Golden Screen Cinemas (GSC)">Golden Screen Cinemas (GSC)</option>
+            <option value="TGV Cinemas">TGV Cinemas</option>
+            <option value="MBO Cinemas">MBO Cinemas</option>
+            <option value="D-BOX Premium">D-BOX Premium</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="agency-intro-text">
+        Manage ticket rates for your cinema. Select your cinema provider from the dropdown above to view and update pricing for currently released movies.
+      </p>
+
+      <!-- Agency movies and ticket prices table -->
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Poster</th>
+              <th>Movie Title</th>
+              <th>Release Date</th>
+              <th>Current Price (MYR)</th>
+              <th>Update Price</th>
+            </tr>
+          </thead>
+          <tbody id="agency-movies-tbody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add/Edit Movie Modal -->
+  <div class="modal hidden" id="movie-form-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-content-sm">
+      <button class="modal-close" id="close-movie-form-modal">&times;</button>
+      <div class="ticket-modal-header">
+        <span class="ticket-icon" id="movie-form-icon">🎬</span>
+        <h2 id="movie-form-heading">Add New Movie</h2>
+        <p class="movie-sub">Manage Movie Metadata</p>
+      </div>
+      
+      <form class="review-form" id="movie-editor-form" style="background: transparent; border: none; padding: 0 2rem 2rem;">
+        <input type="hidden" id="movie-form-id" value="" />
+        
+        <div class="form-group">
+          <label for="movie-form-title">Movie Title</label>
+          <input type="text" id="movie-form-title" placeholder="e.g., Space Odyssey" required />
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="movie-form-genre">Genre</label>
+            <select id="movie-form-genre" required style="background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-glass); color: var(--text-main); padding: 0.6rem 0.85rem; border-radius: 8px; font-family: 'Outfit';">
+              <option value="Action">Action</option>
+              <option value="Horror">Horror</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Romance">Romance</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="movie-form-age">Age Rating</label>
+            <select id="movie-form-age" required style="background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-glass); color: var(--text-main); padding: 0.6rem 0.85rem; border-radius: 8px; font-family: 'Outfit';">
+              <option value="U">U (General)</option>
+              <option value="P13">P13</option>
+              <option value="16">16</option>
+              <option value="18">18</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="movie-form-date">Release Date</label>
+            <input type="date" id="movie-form-date" required />
+          </div>
+          <div class="form-group" style="flex-direction: row; align-items: center; gap: 0.5rem; padding-top: 1.5rem;">
+            <input type="checkbox" id="movie-form-trending" value="1" style="width: auto; cursor: pointer;" />
+            <label for="movie-form-trending" style="cursor: pointer; text-transform: none; font-size: 0.9rem;">Mark as Trending</label>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="movie-form-poster">Poster URL / Path</label>
+          <input type="text" id="movie-form-poster" placeholder="e.g., posters/my_movie.jpg or https://image-url" />
+        </div>
+        
+        <div class="form-group">
+          <label for="movie-form-synopsis">Synopsis</label>
+          <textarea id="movie-form-synopsis" rows="4" placeholder="Brief summary of the movie storyline..." required></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block" id="submit-movie-form-btn">
+          <span class="btn-text">Save Movie</span>
+          <span class="spinner hidden"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Interactive Details & Reviews Modal -->
+  <div class="modal hidden" id="reviews-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <button class="modal-close" id="close-reviews-modal">&times;</button>
+      
+      <div class="modal-body-split">
+        <!-- Left: Movie Info -->
+        <div class="modal-movie-info">
+          <div class="modal-poster-wrap">
+            <img id="modal-movie-poster" src="" alt="Movie Poster" />
+            <div class="modal-age-rating" id="modal-movie-age">P13</div>
+          </div>
+          <h2 id="modal-movie-title" class="modal-title">Movie Title</h2>
+          <div class="modal-tags">
+            <span class="genre-tag" id="modal-movie-genre">Sci-Fi</span>
+            <span class="release-date-tag" id="modal-movie-release">Release Date</span>
+          </div>
+          <div class="modal-rating-summary">
+            <div class="stars-outer">
+              <div class="stars-inner" id="modal-movie-stars">★★★★★</div>
+            </div>
+            <span class="rating-number" id="modal-movie-rating-val">4.5</span>
+            <span class="reviews-count" id="modal-movie-review-count">(12 reviews)</span>
+          </div>
+          <h3 class="modal-section-heading">Synopsis</h3>
+          <p id="modal-movie-synopsis" class="modal-synopsis-text">
+            Movie storyline goes here...
+          </p>
+        </div>
+        
+        <!-- Right: Reviews and Submission -->
+        <div class="modal-reviews-section">
+          <h3 class="modal-section-heading">User Reviews</h3>
+          
+          <!-- Reviews Scroll List -->
+          <div class="reviews-list" id="modal-reviews-list">
+            <!-- Populated dynamically -->
+          </div>
+          
+          <!-- Write Review Form -->
+          <form class="review-form" id="submit-review-form">
+            <h4 class="form-title">Share Your Rating & Review</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="review-username">Your Name</label>
+                <input type="text" id="review-username" placeholder="e.g., Jane Doe" required />
+              </div>
+              <div class="form-group">
+                <label>Your Rating</label>
+                <div class="star-rating-input">
+                  <span class="star-input" data-val="5">★</span>
+                  <span class="star-input" data-val="4">★</span>
+                  <span class="star-input" data-val="3">★</span>
+                  <span class="star-input" data-val="2">★</span>
+                  <span class="star-input" data-val="1">★</span>
+                </div>
+                <input type="hidden" id="review-rating-val" value="0" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="review-text">Written Review</label>
+              <textarea id="review-text" rows="3" placeholder="Tell us about your viewing experience..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="submit-review-btn">
+              <span class="btn-text">Submit Review</span>
+              <span class="spinner hidden"></span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Ticket Comparison Modal -->
+  <div class="modal hidden" id="tickets-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-content-sm">
+      <button class="modal-close" id="close-tickets-modal">&times;</button>
+      <div class="ticket-modal-header">
+        <span class="ticket-icon">🎟️</span>
+        <h2>Cinema Ticket Price Comparison</h2>
+        <p id="ticket-modal-movie-title" class="movie-sub">Movie Title</p>
+      </div>
+      
+      <div class="ticket-comparison-table-wrap">
+        <table class="ticket-table">
+          <thead>
+            <tr>
+              <th>Cinema Provider</th>
+              <th>Ticket Price (MYR)</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="ticket-comparison-tbody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="ticket-footer">
+        <p>* Prices shown are estimated base rates. Additional fees may apply during peak hours or for premium formats.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Topflix. Built with passion for film enthusiasts.</p>
+  </footer>
+
+  <!-- JS Scripts -->
+  <script src="js/script.js"></script>
+</body>
+</html>
